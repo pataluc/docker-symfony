@@ -25,6 +25,10 @@ RUN docker-php-ext-install pdo pdo_mysql \
     && docker-php-ext-install gd \
     && docker-php-ext-install zip
 
+RUN if [ "${http_proxy}" != "" ]; then \
+    # Needed for pecl to succeed
+    pear config-set http_proxy ${http_proxy} \
+;fi
 
 # install xdebug
 RUN pecl install xdebug \
