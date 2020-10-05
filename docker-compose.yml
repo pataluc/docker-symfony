@@ -21,7 +21,7 @@ services:
     nginx:
         build: nginx
         ports:
-            - 80:80
+            - ${NGINX_HTTP}:80
         volumes_from:
             - php
         volumes:
@@ -29,7 +29,7 @@ services:
     elk:
         image: willdurand/elk
         ports:
-            - 81:80
+            - ${ELK_HTTP}:80
         volumes:
             - ./elk/logstash:/etc/logstash
             - ./elk/logstash/patterns:/opt/logstash/patterns
@@ -39,4 +39,4 @@ services:
     phpmyadmin:
         image: phpmyadmin/phpmyadmin
         ports:
-            - "8080:80"
+            - ${PHPMYADMIN_HTTP}:80
