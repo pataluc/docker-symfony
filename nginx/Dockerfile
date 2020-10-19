@@ -1,6 +1,11 @@
 FROM debian:jessie
 
-MAINTAINER Maxence POUTORD <maxence.poutord@gmail.com>
+LABEL maintainer="Maxence POUTORD <maxence.poutord@gmail.com>"
+
+ARG USE_PROXY
+
+ENV http_proxy=${USE_PROXY:+http://a-ibicer15.srv-ib.dev:3128}
+ENV https_proxy=${USE_PROXY:+http://a-ibicer15.srv-ib.dev:3128}
 
 RUN apt-get update && apt-get install -y \
     nginx

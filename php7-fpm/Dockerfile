@@ -2,7 +2,12 @@
 FROM php:7.4-fpm
 ARG TIMEZONE
 
-MAINTAINER Maxence POUTORD <maxence.poutord@gmail.com>
+LABEL maintainer="Maxence POUTORD <maxence.poutord@gmail.com>"
+
+ARG USE_PROXY
+
+ENV http_proxy=${USE_PROXY:+http://a-ibicer15.srv-ib.dev:3128}
+ENV https_proxy=${USE_PROXY:+http://a-ibicer15.srv-ib.dev:3128}
 
 RUN apt-get update && apt-get install -y \
     openssl \
@@ -42,8 +47,10 @@ RUN pecl install xdebug \
 && echo "xdebug.idekey=\"PHPSTORM\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
 && echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
-RUN curl https://get.symfony.com/cli/installer | bash \
-    && mv /root/.symfony/bin/symfony /usr/local/bin/symfony
+RUN curl -L https://github.com/symfony/cli/releases/download/v4.20.0/symfony_linux_amd64.gz -o symfony.gz \
+    && gunzip symfony.gz \
+    && chmod +x symfony \
+    && mv symfony /usr/local/bin/symfony
 
 
 RUN echo 'alias sf="php app/console"' >> ~/.bashrc \
