@@ -1,5 +1,5 @@
 # See https://github.com/docker-library/php/blob/master/7.1/fpm/Dockerfile
-FROM php:7.2-fpm
+FROM php:7.4-fpm
 ARG TIMEZONE
 
 MAINTAINER Maxence POUTORD <maxence.poutord@gmail.com>
@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
     openssl \
     git \
     unzip \
-    build-essential libssl-dev zlib1g-dev libpng-dev libjpeg-dev libfreetype6-dev
+    build-essential libssl-dev zlib1g-dev libpng-dev libjpeg-dev libfreetype6-dev libzip-dev
 
 # Install Composer
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer \
@@ -21,7 +21,8 @@ RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} >
 
 # Type docker-php-ext-install to see available extensions
 RUN docker-php-ext-install pdo pdo_mysql \
-    && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
+    && docker-php-ext-configure gd \ 
+    # --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-install gd \
     && docker-php-ext-install zip
 
@@ -41,8 +42,13 @@ RUN pecl install xdebug \
 && echo "xdebug.idekey=\"PHPSTORM\"" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
 && echo "xdebug.remote_port=9001" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 
+RUN curl https://get.symfony.com/cli/installer | bash \
+    && mv /root/.symfony/bin/symfony /usr/local/bin/symfony
+
 
 RUN echo 'alias sf="php app/console"' >> ~/.bashrc \
 && echo 'alias sf3="php bin/console"' >> ~/.bashrc
+
+ENV COMPOSER_MEMORY_LIMIT=-1
 
 WORKDIR /var/www/symfony
