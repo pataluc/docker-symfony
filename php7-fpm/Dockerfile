@@ -4,10 +4,10 @@ ARG TIMEZONE
 
 LABEL maintainer="Maxence POUTORD <maxence.poutord@gmail.com>"
 
-ARG USE_PROXY
+ARG PROXY
 
-ENV http_proxy=${USE_PROXY:+http://a-ibicer15.srv-ib.dev:3128}
-ENV https_proxy=${USE_PROXY:+http://a-ibicer15.srv-ib.dev:3128}
+ENV http_proxy=${PROXY:+http://a-ibicer15.srv-ib.dev:3128}
+ENV https_proxy=${PROXY:+http://a-ibicer15.srv-ib.dev:3128}
 
 RUN apt-get update && apt-get install -y \
     openssl \

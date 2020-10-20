@@ -15,7 +15,7 @@ services:
             context: php7-fpm
             args:
                 TIMEZONE: ${TIMEZONE}
-                USE_PROXY: ${USE_PROXY}
+                PROXY: ${PROXY}
         volumes:
             - ${SYMFONY_APP_PATH}:/var/www/symfony
             - ./logs/symfony:/var/www/symfony/app/logs
@@ -23,7 +23,7 @@ services:
         build:
             context: nginx
             args:
-                USE_PROXY: ${USE_PROXY}
+                PROXY: ${PROXY}
         ports:
             - ${NGINX_HTTP}:80
         volumes_from:
